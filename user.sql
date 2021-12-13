@@ -1,0 +1,3 @@
+GRANT USAGE ON *.* TO `moviepedia_user`@`localhost` IDENTIFIED BY PASSWORD '*F75DE043E09C3318F2D8FB89A05076B77E984D38';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON `moviepedia`.* TO `moviepedia_user`@`localhost`;
