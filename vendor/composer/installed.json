@@ -1,0 +1,50 @@
+{
+    "packages": [
+        {
+            "name": "owasp/csrf-protector-php",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mebjas/CSRF-Protector-PHP.git",
+                "reference": "df629c87e4b7b5408d32f1692ea8c93fb5ac8e4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mebjas/CSRF-Protector-PHP/zipball/df629c87e4b7b5408d32f1692ea8c93fb5ac8e4e",
+                "reference": "df629c87e4b7b5408d32f1692ea8c93fb5ac8e4e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "~1.0"
+            },
+            "time": "2020-10-16T11:35:37+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "libs/csrf/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "CSRF protector php, a standalone php library for csrf mitigation in web applications. Easy to integrate in any php web app.",
+            "homepage": "https://github.com/mebjas/CSRF-Protector-PHP",
+            "keywords": [
+                "csrf",
+                "owasp",
+                "security"
+            ],
+            "support": {
+                "issues": "https://github.com/mebjas/CSRF-Protector-PHP/issues",
+                "source": "https://github.com/mebjas/CSRF-Protector-PHP/tree/master"
+            },
+            "install-path": "../owasp/csrf-protector-php"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
