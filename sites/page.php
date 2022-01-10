@@ -29,7 +29,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles/header.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-  <script src="https://kit.fontawesome.com/yourcode.js"></script>
   <title>Moviepedia</title>
 </head>
 <body>
@@ -59,12 +58,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
   <main>
       <div class="container p-3">
       <h1>
-        <?php echo $page['title']; ?>
+        <?php echo htmlspecialchars($page['title']); ?>
       </h1>
-      <p class="text-break"> <?php echo $page['text']; ?> </p>
+      <p class="text-break"> <?php echo htmlspecialchars($page['text']); ?> </p>
       <?php
         if(isset($page["image"]) && file_exists("../upload/".$page["image"])){
-          echo ("<img src=\"../upload/".$page['image']."\" class=\" img-fluid\">");
+          echo ("<img src=\"../upload/".htmlspecialchars($page['image'])."\" class=\" img-fluid\">");
         }
       ?>
       <?php 
