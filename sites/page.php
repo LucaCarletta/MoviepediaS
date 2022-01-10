@@ -62,6 +62,11 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         <?php echo $page['title']; ?>
       </h1>
       <p class="text-break"> <?php echo $page['text']; ?> </p>
+      <?php
+        if(isset($page["image"]) && file_exists("../upload/".$page["image"])){
+          echo ("<img src=\"../upload/".$page['image']."\" class=\" img-fluid\">");
+        }
+      ?>
       <?php 
         if(isMod()){
           echo "<a class='btn btn-danger' href='./delete.php?id=". $page["id"]."'?> Delete </a>";

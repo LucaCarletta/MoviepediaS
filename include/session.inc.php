@@ -1,4 +1,6 @@
 <?php
+  include_once '../vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
+  csrfProtector::init();
   session_start();
   session_regenerate_id(true);
 

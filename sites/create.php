@@ -57,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     }
     $stmt->execute();
     $stmt->close();
-    //header('Location:./home.php');
+    header('Location:./home.php');
   }
 }
 ?>
