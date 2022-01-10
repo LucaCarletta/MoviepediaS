@@ -17,9 +17,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     }
   }
   $stmt->close();
-  if(!$page['approved']){
-    header("Location:./home.php");
-  }
 } else{
   header("Location:./home.php");
 }
@@ -45,11 +42,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         $tabs='<li class="nav-item active">
           <a class="nav-link" href="../sites/create.php">Create Page<span class="sr-only">(current)</span></a>
           </li>';
-        if(isMod()){
-          $tabs.='<li class="nav-item active">
-            <a class="nav-link" href="../sites/sign.php">Sign Pages<span class="sr-only">(current)</span></a>
-            </li>';
-        }
         $tabs.='<li class="nav-item active">
           <a class="nav-link" href="../sites/account.php">Account<span class="sr-only">(current)</span></a>
           </li>';
@@ -70,11 +62,9 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         <?php echo $page['title']; ?>
       </h1>
       <p class="text-break"> <?php echo $page['text']; ?> </p>
-      <a class='btn btn-outline-dark' href='./edit.php?id=<?php echo $page["id"]; ?>'> Edit </a>
       <?php 
         if(isMod()){
           echo "<a class='btn btn-danger' href='./delete.php?id=". $page["id"]."'?> Delete </a>";
-        
         }
       ?>
       </div>

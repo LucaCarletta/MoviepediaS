@@ -28,16 +28,36 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
   }
   //wenn kein fehler
   if(empty($error)){
-    $approved = true;
-    //user von session
     $id = $_SESSION['id'];
-    //schreibt in datenbank
-    $query = "INSERT INTO PAGES (title, text, approved, author) VALUE (?,?,?,?)"; 
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param('ssii', $title, $content, $approved, $id);
+    if(isset($_FILES['image'])){
+      echo($_FILES);
+      $output_dir = "../upload/";
+      $randomNum = time();
+	    $ImageName = str_replace(' ','-',strtolower($_FILES['image']['name'][0]));
+	    $ImageType = $_FILES['image']['type'][0];
+ 
+	    $ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+	    $ImageExt       = str_replace('.','',$ImageExt);
+	    $ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
+	    $NewImageName = $ImageName.'-'.$randomNum.'.'.$ImageExt;
+      $ret[$NewImageName]= $output_dir.$NewImageName;
+	
+	    /* Try to create the directory if it does not exist */
+	    if (!file_exists($output_dir)){
+		    @mkdir($output_dir, 0777);
+	    }
+      move_uploaded_file($_FILES["image"]["tmp_name"][0],$output_dir."/".$NewImageName );
+      $query = "INSERT INTO PAGES (title, text, image) VALUE (?,?,?)"; 
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param('sss', $title, $content, $NewImageName);
+	  } else{
+      $query = "INSERT INTO PAGES (title, text) VALUE (?,?)"; 
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param('ss', $title, $content );
+    }
     $stmt->execute();
     $stmt->close();
-    header('Location:./home.php');
+    //header('Location:./home.php');
   }
 }
 ?>
@@ -61,11 +81,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         $tabs='<li class="nav-item active">
           <a class="nav-link" href="../sites/create.php">Create Page<span class="sr-only">(current)</span></a>
           </li>';
-        if(isMod()){
-          $tabs.='<li class="nav-item active">
-            <a class="nav-link" href="../sites/sign.php">Sign Pages<span class="sr-only">(current)</span></a>
-            </li>';
-        }
         $tabs.='<li class="nav-item active">
           <a class="nav-link" href="../sites/account.php">Account<span class="sr-only">(current)</span></a>
           </li>';
@@ -78,10 +93,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
       ?>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
   <main>
@@ -93,7 +104,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
           echo "<div class='alert alert-danger' role='alert'>" . $error . "</div>";
         }
       ?>
-      <form action="./create.php" method="post">
+      <form action="./create.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">Title</label>
           <input type="text" name="title" class="form-control" id="title"
@@ -106,7 +117,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
           <label for="content">Content</label>
           <textarea class="form-control" name="content" id="content" cols="70" minlength="80" rows="8" required><?php echo $content?></textarea>
         </div>
-        
+         <div class="form-group">
+          <label for="image">Image</label>
+          <input type="file" name="image[]" class="form-control" id="image">
+        </div>
         <button type="submit" name="button" value="submit" class="btn btn-dark btn-outline">Senden</button>
       </form>
     </div>

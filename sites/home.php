@@ -28,12 +28,6 @@ include("../include/dbconnector.inc.php");
         $tabs='<li class="nav-item active">
           <a class="nav-link" href="../sites/create.php">Create Page<span class="sr-only">(current)</span></a>
           </li>';
-          //ob er ein Moderator ist
-        if(isMod()){
-          $tabs.='<li class="nav-item active">
-            <a class="nav-link" href="../sites/sign.php">Sign Pages<span class="sr-only">(current)</span></a>
-            </li>';
-        }
         $tabs.='<li class="nav-item active">
           <a class="nav-link" href="../sites/account.php">Account<span class="sr-only">(current)</span></a>
           </li>';
@@ -52,16 +46,10 @@ include("../include/dbconnector.inc.php");
   <main>
     <h1>Home</h1>
     <?php 
-    //holt alle aprovten Seiten, die schon von einem User überprüft sind
-      $approved = true;
       //Datenbankverbindung
-      $query = "SELECT * FROM pages WHERE approved = ?"; 
+      $query = "SELECT * FROM pages"; 
       //vorbereiten
-      $stmt = $mysqli->prepare($query);
-      //was das Fragezeichen bedeutet
-      $stmt->bind_param('i', $approved);
-      $stmt->execute();
-      $result = $stmt->get_result();
+      $result = $mysqli->query($query);
       if($result->num_rows){
         //holt alle pages. fetch_assoc hot daten
         while ($page = $result->fetch_assoc()){

@@ -12,10 +12,10 @@ $username = $password="";
         
         // prüfung benutzername
         if(empty($username) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}/", $username)){
-          $error .= "The username is not in the right format.<br />";
+          $error .= "The username is not in the right format.";
         }
       } else {
-        $error .= "Fill out a username.<br />";
+        $error .= "Username is Empty";
       }
       // password
       if(isset($_POST['password'])){
@@ -23,10 +23,10 @@ $username = $password="";
         $password = trim($_POST['password']);
         // passwort gültig?
         if(empty($password) || !preg_match("/(?=^.{8,255}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $password)){
-          $error .= "The password is not in the right format.<br />";
+          $error .= "The password is not in the right format.";
         }
       } else {
-        $error .= "Fill out a password.<br />";
+        $error .= "Password is Empty";
       }
       
       // kein fehler
@@ -47,14 +47,22 @@ $username = $password="";
               
               loginUser($username, $row["moderator"], $row['id']);
               header('Location:./home.php');
-    
             }
             else{
-              $error .= "Login is wrong";
+              $error .= "Password is wrong";
             }
             $stmt->close();
           }
-        }
+        } 
+      } else {
+          
+        $query = "SELECT * FROM users WHERE username = ?";
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param('s', 'l');
+        $stmt->execute();
+    
+        password_verify('s', 'k');
+        $stmt->close();
       }
     }
 ?>
@@ -101,7 +109,7 @@ $username = $password="";
     <h1>Log In</h1>
     <?php
         if(!empty($error)){
-          echo "<div class='alert alert-danger' role='alert'>" . $error . "</div>";
+          echo "<div class='alert alert-danger' role='alert'>Username or Password is incorrect </div>";
         }
       ?>
     <form action="./login.php" method="post">
@@ -109,19 +117,16 @@ $username = $password="";
 					<label for="username">Username</label>
 					<input type="text" name="username" class="form-control" id="username"
 						value=""
-						placeholder="capital- and lowercase letters, min 4 charachter. "
-						pattern="(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}"
-						title="capital- and lowercase letters, min 4 charachter."
+						placeholder="Username"
+						title="Username"
 						required="true">
 				</div>
 
         <div class="form-group">
 					<label for="password">Password</label>
 					<input type="password" name="password" class="form-control" id="password"
-						placeholder="capital- and lowercase letters, numbers, special letters, min. 8 charachter"
-						pattern="(?=^.{8,}$)((?=.*\d+)(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
-						title="mindestens einen Gross-, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen, mindestens 8 Zeichen lang,keine Umlaute."
-						maxlength="255"
+						placeholder="Password"
+						title="Password"
 						required="true">
 				</div>
 

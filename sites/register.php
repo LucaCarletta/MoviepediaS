@@ -104,11 +104,6 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
         $tabs='<li class="nav-item active">
           <a class="nav-link" href="../sites/create.php">Create Page<span class="sr-only">(current)</span></a>
           </li>';
-        if(isMod()){
-          $tabs.='<li class="nav-item active">
-            <a class="nav-link" href="../sites/sign.php">Sign Pages<span class="sr-only">(current)</span></a>
-            </li>';
-        }
         $tabs.='<li class="nav-item active">
           <a class="nav-link" href="../sites/account.php">Account<span class="sr-only">(current)</span></a>
           </li>';
