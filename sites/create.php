@@ -1,4 +1,5 @@
 <?php
+  include("../include/logger.inc.php");
   include("../include/session.inc.php");
   include("../include/dbconnector.inc.php");
   //auf null setztn
@@ -28,7 +29,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
   }
   //wenn kein fehler
   if(empty($error)){
-    $id = $_SESSION['id'];
     if(isset($_FILES['image'])){
       $output_dir = "../upload/";
       $randomNum = time();
@@ -36,16 +36,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	    $imageType = $_FILES['image']['type'][0];
  
 	    $imageExt = substr($imageName, strrpos($imageName, '.'));
-	    $imageExt = str_replace('.','',$ImageExt);
+	    $imageExt = str_replace('.','',$imageExt);
 	    $imageName = preg_replace("/\.[^.\s]{3,4}$/", "", $imageName);
 	    $newImageName = $imageName.'-'.$randomNum.'.'.$imageExt;
       $ret[$newImageName]= $output_dir.$newImageName;
 
        $whitelist = array("image/jpg","image/jpeg","image/gif","image/png"); 
       if (!(in_array($imageType, $whitelist))) {
-         $error .= 'not allowed extension,please upload images only';
+         $error .= 'not allowed file type, please upload images only </br>';
       }
-      echo($imageType);
+      $whitelist = array("jpg","jpeg","gif","png"); 
+      if (!(in_array($imageExt, $whitelist))) {
+         $error .= 'not allowed extension, please upload images only </br>';
+      }
 	
       if(empty($error)){
 	      /* Try to create the directory if it does not exist */
@@ -65,8 +68,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     if(empty($error)){
       $stmt->execute();
       $stmt->close();
+      logger('Page Created', $_SESSION['username']);
       header('Location:./home.php');
+    } else{
+      logger($error, $_SESSION['username']);
     }
+  } else{
+    logger($error, $_SESSION['username']);
   }
 }
 ?>
@@ -118,7 +126,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                   value="<?php echo $title ?>"
                   placeholder="Enter a Title"
                   maxlength="60"
-                  required="true">
+                  required>
         </div>
         <div class="form-group">
           <label for="content">Content</label>
@@ -126,7 +134,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         </div>
          <div class="form-group">
           <label for="image">Image</label>
-          <input type="file" name="image[]" class="form-control" id="image">
+          <input type="file" name="image[]" class="form-control" id="image" required>
         </div>
         <button type="submit" name="button" value="submit" class="btn btn-dark btn-outline">Senden</button>
       </form>

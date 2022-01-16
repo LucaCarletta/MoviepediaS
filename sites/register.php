@@ -1,4 +1,5 @@
 <?php
+include("../include/logger.inc.php");
 include("../include/dbconnector.inc.php");
 include("../include/session.inc.php");
 $error="";
@@ -23,7 +24,7 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 			$firstname = trim($_POST['firstname']);
 			
 			// prüfung vorname
-			if(empty($firstname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{3,30}/", $firstname)){
+			if(empty($firstname) || !preg_match("/(?=.*[a-z])[a-zA-Z]{3,30}/", $firstname)){
 				$error .= "The firstname is not in the right format.<br />";
 			}
 		} else {
@@ -35,7 +36,7 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 			$lastname = trim($_POST['lastname']);
 			
 			// prüfung name
-			if(empty($lastname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{3,30}/", $lastname)){
+			if(empty($lastname) || !preg_match("/(?=.*[a-z])[a-zA-Z]{3,30}/", $lastname)){
 				$error .= "The lastname is not in the right format.<br />";
 			}
 		} else {
@@ -72,11 +73,13 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 			$stmt = $mysqli->prepare($query);
 			$stmt->bind_param('sssssi', $username, $firstname, $lastname, $email, $password, $moderator);
 			$stmt->execute();
-			
-				$stmt->close();
-				header('Location:./login.php');
-			  }
-			}
+			$stmt->close();
+			logger('User was created', $username);
+			header('Location:./login.php');
+		} else{
+			logger($error, '');
+		}
+	}
 		
 	?>
 <!DOCTYPE html>
@@ -125,7 +128,6 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 					<label for="username">Username *</label>
 					<input type="text" name="username" class="form-control" id="username"
 						value=""
-						pattern="(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,}"
 						placeholder="capital- and lowercase letters, min 6 charachter. "
 						title="capital- and lowercase letters, min 6 charachter."
 						maxlength="30" 
@@ -169,8 +171,6 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
             maxlength="100"
             required="true">
         </div>
-          <label for="mod">Moderator *</label>
-          <input type="checkbox" name="mod" class="form-control" id="mod">
 
 		
 		<button type="submit" name="button" value="submit" class="btn btn-info">Register</button>

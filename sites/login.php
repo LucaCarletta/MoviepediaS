@@ -1,6 +1,8 @@
 <?php
+include("../include/logger.inc.php");
 include("../include/dbconnector.inc.php");
 include("../include/session.inc.php");
+if(!isLoggedIn()){
 $error="";
 $username = $password="";
     if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -8,30 +10,24 @@ $username = $password="";
       // username
       if(isset($_POST['username'])){
         //trim
-        $username = htmlspecialchars(trim($_POST['username']));
+        $username = trim($_POST['username']);
         
         // prüfung benutzername
-        if(empty($username) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}/", $username)){
-          $error .= "The username is not in the right format.";
+        if(empty($username)){
+          $error .= "Username is Empty";
         }
       } else {
         $error .= "Username is Empty";
       }
       // password
       if(isset($_POST['password'])){
-        //trim
         $password = $_POST['password'];
-        // passwort gültig?
-        if(empty($password) || !preg_match("/(?=^.{8,255}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $password)){
-          $error .= "The password is not in the right format.";
-        }
       } else {
         $error .= "Password is Empty";
       }
       
       // kein fehler
       if(empty($error)){
-      
         $query = "SELECT * FROM users WHERE username =?";
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param('s', $username);
@@ -44,18 +40,19 @@ $username = $password="";
             //überprüft ob Passswort übereinstimmt
             //password_verify: $passwoerd wo man in loginpage eingegeben hat $row... das wo in datenbank steht(gehashed )
             if(password_verify($password, $row['password'])){
-              
               loginUser($username, $row["moderator"], $row['id']);
               header('Location:./home.php');
             }
             else{
-              $error .= "Password is wrong";
+              logger("Password is wrong", $username);
             }
             $stmt->close();
           }
+        } else{
+          logger('Username doesn\'t exist', $username);
         } 
       } else {
-          
+        logger($error, ' ');
         $query = "SELECT * FROM users WHERE username = ?";
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param('s', 'l');
@@ -65,6 +62,10 @@ $username = $password="";
         $stmt->close();
       }
     }
+  }else{
+    logger('logged in User tried to Log in', $_SESSION['username']);
+     header('Location:./home.php');
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,16 +81,11 @@ $username = $password="";
   <a class="navbar-brand" href="../sites/home.php">Moviepedia</a>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <?php
+     <?php
       if(isLoggedIn()){
         $tabs='<li class="nav-item active">
           <a class="nav-link" href="../sites/create.php">Create Page<span class="sr-only">(current)</span></a>
           </li>';
-        if(isMod()){
-          $tabs.='<li class="nav-item active">
-            <a class="nav-link" href="../sites/sign.php">Sign Pages<span class="sr-only">(current)</span></a>
-            </li>';
-        }
         $tabs.='<li class="nav-item active">
           <a class="nav-link" href="../sites/account.php">Account<span class="sr-only">(current)</span></a>
           </li>';
