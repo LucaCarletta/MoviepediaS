@@ -4,6 +4,7 @@ include("../include/dbconnector.inc.php");
 
 $page = "";
 
+//Erhalte Seite
 if($_SERVER["REQUEST_METHOD"] == "GET"){
   $query = "SELECT * FROM pages WHERE id = ?"; 
   $id = $_GET['id'];
@@ -57,12 +58,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
   <main>
       <div class="container p-3">
       <h1>
-        <?php echo htmlspecialchars($page['title']); ?>
+        <?php echo ($page['title']); ?>
       </h1>
-      <p class="text-break"> <?php echo htmlspecialchars($page['text']); ?> </p>
+      <p class="text-break"> <?php echo ($page['text']); ?> </p>
       <?php
         if(isset($page["image"]) && file_exists("../upload/".$page["image"])){
-          echo ("<img src=\"../upload/".htmlspecialchars($page['image'])."\" class=\" img-fluid\">");
+          echo ("<img src=\"../upload/".($page['image'])."\" class=\" img-fluid\">");
         }
       ?>
       <?php 

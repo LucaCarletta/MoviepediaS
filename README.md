@@ -5,8 +5,10 @@ https://github.com/LucaCarletta/MoviepediaS
 
 ## Insatllations anleitung
 1. Webserver starten (Apache und SQl)
+2. Datenbank "moviepedia" erstellen
 2. moviepeidia.sql file importien und ausführen
 3. user.sql file importien und ausführen
+
 
 ## Vorinsalierte User
 

@@ -3,6 +3,7 @@
         
         // define the folder name where log file will be creates
         $log_folder_name = "../logs";
+        //X = time, 
 				$log_msg=strftime("%X").' '.htmlspecialchars($log_author). ': '. htmlspecialchars($log_msg);
         // check if folder exists or not
         if (!file_exists($log_folder_name)) {

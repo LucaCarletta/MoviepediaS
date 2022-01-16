@@ -5,6 +5,7 @@
   session_regenerate_id(true);
 
   function loginUser($username, $mod, $id) {
+    //Logger 
     logger('User logged in',$username);
     $_SESSION['username'] = $username;
     $_SESSION['mod'] = $mod;

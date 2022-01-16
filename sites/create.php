@@ -9,7 +9,7 @@
     //auf login page wenn nicht eingelogt
     header('Location:./login.php');
   }
-//ob gepostet worden sit, methode überprüfen
+//ob gepostet worden ist, methode überprüfen
 if($_SERVER['REQUEST_METHOD'] == "POST"){
 
   // title is set, min 1 + max 60 chars long
