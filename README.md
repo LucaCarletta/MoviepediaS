@@ -16,8 +16,8 @@ admin: true
 
 ### Leon
 pw: LeonLeon\*2  
-mod: true  
+admin: true  
 
 ### Aegi
 pw: AegiAegi\*2  
-mod: false  
+admin: false  
