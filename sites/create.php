@@ -30,34 +30,43 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
   if(empty($error)){
     $id = $_SESSION['id'];
     if(isset($_FILES['image'])){
-      echo($_FILES);
       $output_dir = "../upload/";
       $randomNum = time();
-	    $ImageName = str_replace(' ','-',strtolower($_FILES['image']['name'][0]));
-	    $ImageType = $_FILES['image']['type'][0];
+	    $imageName = str_replace(' ','-',strtolower($_FILES['image']['name'][0]));
+	    $imageType = $_FILES['image']['type'][0];
  
-	    $ImageExt = substr($ImageName, strrpos($ImageName, '.'));
-	    $ImageExt       = str_replace('.','',$ImageExt);
-	    $ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
-	    $NewImageName = $ImageName.'-'.$randomNum.'.'.$ImageExt;
-      $ret[$NewImageName]= $output_dir.$NewImageName;
+	    $imageExt = substr($imageName, strrpos($imageName, '.'));
+	    $imageExt = str_replace('.','',$ImageExt);
+	    $imageName = preg_replace("/\.[^.\s]{3,4}$/", "", $imageName);
+	    $newImageName = $imageName.'-'.$randomNum.'.'.$imageExt;
+      $ret[$newImageName]= $output_dir.$newImageName;
+
+       $whitelist = array("image/jpg","image/jpeg","image/gif","image/png"); 
+      if (!(in_array($imageType, $whitelist))) {
+         $error .= 'not allowed extension,please upload images only';
+      }
+      echo($imageType);
 	
-	    /* Try to create the directory if it does not exist */
-	    if (!file_exists($output_dir)){
-		    @mkdir($output_dir, 0777);
-	    }
-      move_uploaded_file($_FILES["image"]["tmp_name"][0],$output_dir."/".$NewImageName );
-      $query = "INSERT INTO PAGES (title, text, image) VALUE (?,?,?)"; 
-      $stmt = $mysqli->prepare($query);
-      $stmt->bind_param('sss', $title, $content, $NewImageName);
+      if(empty($error)){
+	      /* Try to create the directory if it does not exist */
+	      if (!file_exists($output_dir)){
+		      @mkdir($output_dir, 0777);
+	      }
+        move_uploaded_file($_FILES["image"]["tmp_name"][0],$output_dir."/".$newImageName );
+        $query = "INSERT INTO PAGES (title, text, image) VALUE (?,?,?)"; 
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param('sss', $title, $content, $newImageName);
+      }
 	  } else{
       $query = "INSERT INTO PAGES (title, text) VALUE (?,?)"; 
       $stmt = $mysqli->prepare($query);
       $stmt->bind_param('ss', $title, $content );
     }
-    $stmt->execute();
-    $stmt->close();
-    header('Location:./home.php');
+    if(empty($error)){
+      $stmt->execute();
+      $stmt->close();
+      header('Location:./home.php');
+    }
   }
 }
 ?>

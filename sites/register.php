@@ -8,10 +8,10 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 		// username
 		if(isset($_POST['username'])){
 			//trim
-			$username = htmlspecialchars(trim($_POST['username']));
+			$username =trim($_POST['username']);
 			
 			// prüfung benutzername
-			if(empty($username) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}/", $username)){
+			if(empty($username)) {
 				$error .= "The username is not in the right format.<br />";
 			}
 		} else {
@@ -20,10 +20,10 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 
 		if(isset($_POST['firstname'])){
 			//trim
-			$firstname = htmlspecialchars(trim($_POST['firstname']));
+			$firstname = trim($_POST['firstname']);
 			
 			// prüfung vorname
-			if(empty($firstname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}/", $firstname)){
+			if(empty($firstname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{3,30}/", $firstname)){
 				$error .= "The firstname is not in the right format.<br />";
 			}
 		} else {
@@ -32,10 +32,10 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 
 		if(isset($_POST['lastname'])){
 			//trim
-			$lastname = htmlspecialchars(trim($_POST['lastname']));
+			$lastname = trim($_POST['lastname']);
 			
 			// prüfung name
-			if(empty($lastname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,30}/", $lastname)){
+			if(empty($lastname) || !preg_match("/(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{3,30}/", $lastname)){
 				$error .= "The lastname is not in the right format.<br />";
 			}
 		} else {
@@ -55,7 +55,7 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 
 		if(isset($_POST['email'])){
 			//trim
-			$email = htmlspecialchars(trim($_POST['email']));
+			$email = trim($_POST['email']);
 			
 			// prüfung email
 			if(empty($email) || strlen($email)>100){
@@ -64,11 +64,7 @@ $username=$firstname=$lastname=$email=$password=$moderator="";
 		} else {
 			$error .= "Fill out a email.<br />";
 		}
-		if(isset($_POST['mod'])){
-			$moderator=true;
-		} else {
 			$moderator=false;
-		}
 		$password=password_hash($password, PASSWORD_BCRYPT);
 		if(empty($error)){
       

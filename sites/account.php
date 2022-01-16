@@ -58,10 +58,10 @@ if(isLoggedIn()){
           while ($user = $result->fetch_assoc()){
             echo("<div>
             
-            <div> Username: ".$user["username"]."</div>"
-            ."<div> Firstname: ".$user["firstname"]."</div>"
-            ."<div> Lastname: ".$user["lastname"]."</div>"
-            ."<div>Email: ".$user["email"]."</div>"
+            <div> Username: ".htmlspecialchars($user["username"])."</div>"
+            ."<div> Firstname: ".htmlspecialchars($user["firstname"])."</div>"
+            ."<div> Lastname: ".htmlspecialchars($user["lastname"])."</div>"
+            ."<div>Email: ".htmlspecialchars($user["email"])."</div>"
             ."<div> Moderator: ".$user["moderator"]."</div>".
             "</div>");
             //change password
